@@ -5,7 +5,7 @@
 // @require      http://code.jquery.com/jquery-3.3.1.min.js
 // @require      https://cdn.jsdelivr.net/gh/Dextronix/Scistealer@master/unpaywall.js
 // @version      0.1
-// @description  (First public release) Increases access to knowledge
+// @description  Increases access to knowledge
 // @author       Dextronix
 // @grant        GM.setValue
 // @grant        GM.getValue
@@ -117,8 +117,8 @@ function LoadSets(){
 $("#sci-hub_proxy").prop('checked', JSON.parse(settings.scihubproxy));
 $("#booksc_proxy").prop('checked', JSON.parse(settings.bookscproxy));
 $("#autoclick_btn").prop('checked', JSON.parse(settings.autoclick));
-$("#proxy_pref").val(settings.prefproxy);
-$("#scihubURL").val(settings.scihubURL);
+$("#proxy_pref").val(settings.prefproxy).trigger("change");
+$("#scihubURL").val(settings.scihubURL).trigger("change");
 $("#blockedurls").val(settings.urlblacklist);
 $("#progversion").text("Version " + GM_info.script.version);
 }
@@ -146,8 +146,8 @@ document.body.innerHTML = setsmenu;
 document.getElementById("savebtn").onclick=function(){SaveSets()};
 document.getElementById("loadmanual").onclick=function(){ManualDOI()};
 document.getElementById("backbtn").onclick=function(){Goback()};
-LoadSets();
 Add_Options();
+LoadSets();
 }
 
 function isblacklisted(){
@@ -188,19 +188,16 @@ function HandleURL(url, ref) {
 
 function open_Booksc() {
     SaveTitle(doi);
-    var NewDOI = doi.replace("/", "%2F");
-    var bookscURL = "https://booksc.xyz/s/?q=" + NewDOI + "&t=0";
+    var bookscURL = `https://booksc.xyz/s/?q=${doi.replace("/", "%2F")}&t=0`;
     HandleURL(bookscURL, "booksc");
 }
 
 function open_Sci_hub() {
-	// "SS_YEAR"
-	
 	if (SS_YEAR = THISYEAR){
-		HandleURL("http://sci-hub.se/" + document.URL, "scihub");
+		HandleURL(`http://${scihub_URL[settings.scihubURL]}/${document.URL}`, "scihub");
 	}
 	else{
-		HandleURL("http://sci-hub.se/" + doi, "scihub");
+	HandleURL(`http://${scihub_URL[settings.scihubURL]}/${doi}`, "scihub");
 	}
 }
 
@@ -212,8 +209,10 @@ var android_notey = '<style>.SnippetBaseContainer{position:fixed;z-index:9999;bo
 	document.body.innerHTML += android_notey
 	}
 	else{
-	document.body.innerHTML += notey_code;
+	document.body.innerHTML += notey_code;  
 	}
+  
+  $("#scihub_elm").html(scihub_URL[settings.scihubURL]);
 	
     $(".ASRouterButton").click(function() {
         var elm = $(this).attr('id');
