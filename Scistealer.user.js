@@ -193,7 +193,7 @@ function open_Booksc() {
 }
 
 function open_Sci_hub() {
-	if (SS_YEAR = THISYEAR){
+	if (SS_YEAR == THISYEAR){
 		HandleURL(`http://${scihub_URL[settings.scihubURL]}/${document.URL}`, "scihub");
 	}
 	else{

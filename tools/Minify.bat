@@ -1,0 +1,1 @@
+babel-minify Scistealer.user.js --mangle --sourceType script --mergeVars --outFile Scistealer_min.user.js
